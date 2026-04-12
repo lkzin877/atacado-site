@@ -1,0 +1,72 @@
+// SENHA SIMPLES (mude aqui!)
+const SENHA_ADMIN = "chique123"; // ALTERE ISSO!
+
+// Carregar dados ao iniciar
+document.addEventListener('DOMContentLoaded', function() {
+    verificarSenha();
+    carregarDados();
+    configurarNavegacao();
+});
+
+// Verificar senha na primeira vez
+function verificarSenha() {
+    const senha = localStorage.getItem('admin_senha');
+    if (!senha) {
+        const inputSenha = prompt('Digite a senha do admin:');
+        if (inputSenha !== SENHA_ADMIN) {
+            alert('Senha incorreta!');
+            window.close();
+            return;
+        }
+        localStorage.setItem('admin_senha', 'ok');
+    }
+}
+
+// Navegação
+function configurarNavegacao() {
+    const navItems = document.querySelectorAll('.nav-item');
+    const sections = document.querySelectorAll('.admin-section');
+    
+    navItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const target = item.getAttribute('href').substring(1);
+            
+            // Ativar nav item
+            navItems.forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            
+            // Ativar seção
+            sections.forEach(s => s.classList.remove('active'));
+            document.getElementById(target).classList.add('active');
+            
+            // Atualizar título
+            document.getElementById('page-title').textContent = item.textContent.trim();
+        });
+    });
+}
+
+// Modal functions
+function openModal(modalId) {
+    document.getElementById(modalId).classList.add('active');
+}
+
+function closeModal() {
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.classList.remove('active');
+    });
+}
+
+// Carregar todos os dados
+function carregarDados() {
+    carregarConfig();
+    carregarProdutos();
+    carregarAvaliacoes();
+    carregarImagens();
+}
+
+// Configurações
+function carregarConfig() {
+    fetch('data/config.json')
+        .then(r => r.json())
+        .
